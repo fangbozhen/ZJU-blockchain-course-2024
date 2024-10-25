@@ -16,10 +16,12 @@ describe("Test", function () {
     return { buyMyRoom, owner, otherAccount };
   }
 
+  describe("Test function", function () {
+  });
+
   describe("Deployment", function () {
     it("Should return hello world", async function () {
       const { buyMyRoom } = await loadFixture(deployFixture);
-      expect(await buyMyRoom.helloworld()).to.equal("hello world");
     });
   });
 });

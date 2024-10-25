@@ -1,25 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import HouseList from './components/DisplayHouse';
+import { Container } from '@mui/material';
+import AppBar from './components/AppBar';
+import MyHouses from './components/MyHouses';
+import UserInfo from './components/UserInfo';
+
 
 function App() {
+  const [curPage, setCurPage] = useState("Houses");
+  
+  const isDisplayHouse = curPage === "Houses";
+  const isMyHouses = curPage === "MyHouses"; 
+  const isUseInfo = curPage === "UserInfo";
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <Container maxWidth="md" sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+        <AppBar setCurPage={setCurPage}/>
+        {isDisplayHouse && <HouseList />}
+        {isMyHouses && <MyHouses setCurPage={setCurPage}/>}
+        {isUseInfo && <UserInfo />}
+      </Container>
+    
+    
   );
 }
 
