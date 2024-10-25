@@ -103,7 +103,7 @@ contract BuyMyRoom {
         address seller = houses[tokenId].owner;
         myERC20.transferFrom(msg.sender, seller, houses[tokenId].price);
 
-        uint256 poundage = (block.timestamp - houses[tokenId].listedTimestamp) / 100 * houses[tokenId].price / 100;
+        uint256 poundage = (block.timestamp - houses[tokenId].listedTimestamp) / 10 * houses[tokenId].price / 100;
         myERC20.transferFrom(msg.sender, creater, poundage);
 
         houses[tokenId].owner = msg.sender;

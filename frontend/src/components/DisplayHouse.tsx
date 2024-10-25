@@ -65,20 +65,22 @@ export default function DisplayHouse() {
 
     useEffect(() => {
       const getListedHouses = async () => {
-        const houseData = await buyMyRoomContract.methods.getAllListedHouses().call();
-        console.log(houseData);
-        const houseInfoList = houseData.map((house: any) => {
-          return {
-            id: house.id,
-            name: house.name,
-            description: house.description,
-            image: HouseImg,
-            price: house.price,
-            owner: house.owner
+        if (buyMyRoomContract) {
+          const houseData = await buyMyRoomContract.methods.getAllListedHouses().call();
+          console.log(houseData);
+          const houseInfoList = houseData.map((house: any) => {
+            return {
+              id: house.id,
+              name: house.name,
+              description: house.description,
+              image: HouseImg,
+              price: house.price,
+              owner: house.owner
+            }
           }
+          );
+          setHouseInfoList(houseInfoList);
         }
-        );
-        setHouseInfoList(houseInfoList);
       }
 
       getListedHouses();

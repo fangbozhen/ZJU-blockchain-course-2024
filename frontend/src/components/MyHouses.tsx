@@ -22,7 +22,6 @@ export default function MyHouses({ setCurPage }: { setCurPage: (page: string) =>
                 return 
             }
         }
-        alert("Please connect to MetaMask")
         setCurPage("UserInfo");
       }
 

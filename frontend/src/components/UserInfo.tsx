@@ -8,8 +8,8 @@ const GanacheTestChainId = '0x539' // Ganache默认的ChainId = 0x539 = Hex(1337
 const GanacheTestChainName = 'Ganache Test Chain'
 const GanacheTestChainRpcUrl = 'http://127.0.0.1:8545'
 
-function WalletInfo({ account, accountBalance, setAccountBalance, havePool, totalSupply, ethTotalSupply }
-  : { account: string, accountBalance: number, setAccountBalance: (balance: number) => void, havePool: boolean, totalSupply: number, ethTotalSupply: number }) {
+function WalletInfo({ account, accountBalance, setAccountBalance, havePool, totalSupply, ethTotalSupply, setTotalSupply, setEthTotalSupply }
+  : { account: string, accountBalance: number, setAccountBalance: (balance: number) => void, havePool: boolean, totalSupply: number, ethTotalSupply: number, setTotalSupply: (supply: number) => void, setEthTotalSupply: (supply: number) => void }) {
   const [amount, setAmount] = useState(0);
   const [amountOutMin, setAmountOutMin] = useState(0);
   
@@ -22,7 +22,7 @@ function WalletInfo({ account, accountBalance, setAccountBalance, havePool, tota
           value: amount * 10 ** 16
         });
         console.log(amountOut)
-        alert('Buy' + amountOut + 'MyERC success')
+        alert('Buy MyERC success')
         setAmount(0)
       } catch (error: any) {
         alert(error.message)
@@ -30,6 +30,10 @@ function WalletInfo({ account, accountBalance, setAccountBalance, havePool, tota
       
       const ab = await myERC20Contract.methods.balances(account).call()
       setAccountBalance(ab)
+      const ts = await myERC20Contract.methods.totalSupply().call()
+      const ets = await myERC20Contract.methods.ethTotalSupply().call()
+      setTotalSupply(ts)
+      setEthTotalSupply(ets)
     }
   }
 
@@ -117,8 +121,9 @@ export default function UserInfo() {
             setHavePool(false)
         }
       }
-      initCheckPool()
-    }, [])
+      if (isConnected)
+        initCheckPool()
+    }, [isConnected])
 
     useEffect(() => {
       const initCheckAccounts = async () => {
@@ -126,10 +131,14 @@ export default function UserInfo() {
         const {ethereum} = window;
         if (Boolean(ethereum && ethereum.isMetaMask)) {
             // 尝试获取连接的用户账户
-            const accounts = await web3.eth.getAccounts()
-            if(accounts && accounts.length) {
-                setAccount(accounts[0])
-                setIsConnected(true);
+            try {
+              const accounts = await web3.eth.getAccounts()
+              if(accounts && accounts.length) {
+                  setAccount(accounts[0])
+                  setIsConnected(true);
+              }
+            } catch (error: any) {
+              alert(error.message)
             }
         }
       }
@@ -224,7 +233,7 @@ export default function UserInfo() {
         </Box>
         {isConnected && <WalletInfo 
           account={account} accountBalance={accountBalance} setAccountBalance={setAccountBalance} havePool={havePool}
-          totalSupply={totalSupply} ethTotalSupply={ethTotalSupply}/>}
+          totalSupply={totalSupply} ethTotalSupply={ethTotalSupply} setEthTotalSupply={setEthTotalSupply} setTotalSupply={setTotalSupply}/>}
 
       </Stack>
     )
